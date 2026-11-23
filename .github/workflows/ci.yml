@@ -1,0 +1,25 @@
+name: OrbitPay CI — Security & Unit Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run 21 Shared-Module Compliance & Security Tests
+        run: node test.js
+
+      - name: Build Hardened Non-Root Nginx Container
+        run: docker build -t orbitpay-mesh:ci .
